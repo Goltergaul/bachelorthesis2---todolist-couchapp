@@ -22,4 +22,4 @@ steal.plugins(
 
 	.controllers('application', 'todo', 'list')					// loads files in controllers folder
 
-	.views('application', 'todo', 'list');						// adds views to be added to build
+	.views('application', 'todo', 'list');					 // adds views to be added to build

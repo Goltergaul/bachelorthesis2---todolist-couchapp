@@ -65,6 +65,8 @@ $.Model.extend('Todolist.Models.List',
 	  var self = this;
 	  jQuery.extend(params, {
 	    include_docs: true,
+	    startkey: [Todolist.Controllers.Application.SESSION],
+	    endkey: [Todolist.Controllers.Application.SESSION,{}],
 	    success: function(response) {
         var wrapped = self.wrapMany(response);
         success(wrapped);

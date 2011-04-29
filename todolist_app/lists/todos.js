@@ -1,9 +1,14 @@
 function(head, req) {
+  
+  if(!req.query.startkey || !req.query.endkey || req.query.startkey[0] !== req.query.endkey[0]) {
+    send("Ungültige Anfrage. Bitte Start- und Endkey angeben.");
+    return;
+  }
+  
   var returnObj = [];
   while (row = getRow()) {
     
-    
-    if(row.key[1] == 0) {
+    if(row.key[2] == 0) {
       // prüfen ob der Benutzer Zugriff auf diese Liste hat
       if(row.doc.owners.indexOf(req.userCtx.name) === -1) continue;
       
@@ -20,6 +25,7 @@ function(head, req) {
         doc: row.doc
       });
     }
+    
   }
 
   send(JSON.stringify(returnObj));

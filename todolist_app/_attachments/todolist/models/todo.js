@@ -35,7 +35,7 @@ $.Model.extend('Todolist.Models.Todo',
     var list_doc = $(".todolist_models_list_"+attrs.list_id).model();
     attrs["owners"] = list_doc.owners;
     
-    return attrs;
+    return this.encrypt(attrs);
   },
   
   wrapMany : function(rows) {
@@ -49,7 +49,7 @@ $.Model.extend('Todolist.Models.Todo',
   },
   
   transform : function(row) {
-    return this.wrap({
+    var wrapped = this.wrap({
         id: row.id,
         _rev: row.doc._rev,
         descr: row.doc.descr,
@@ -58,6 +58,22 @@ $.Model.extend('Todolist.Models.Todo',
         status: row.doc.status,
         owners: row.doc.owners
       });
+      
+    return this.decrypt(wrapped);
+  },
+  
+  encrypt : function(row) {
+    row.descr = sjcl.encrypt(Todolist.Controllers.Application.SESSION_PW.toString(), row.descr);
+    return row;
+  },
+  
+  decrypt : function(row) {
+    try {
+      row.descr = sjcl.decrypt(Todolist.Controllers.Application.SESSION_PW.toString(), row.descr);
+    } catch(e) {
+      row.descr = "Nicht entschlüsselbar";
+    }
+    return row;
   },
 
 	/**

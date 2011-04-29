@@ -12,7 +12,7 @@ steal.plugins(
 	
 	.css('../cupertino/jquery-ui-1.8.11.custom', 'todolist')	// loads styles
 
-	.resources('couch', 'sha1', 'jquery.tokeninput').then(function() {
+	.resources('couch', 'sha1', 'jquery.tokeninput', 'sjcl').then(function() {
 	  
 	  window.db = $.couch.db("todolist(public)");
 	  

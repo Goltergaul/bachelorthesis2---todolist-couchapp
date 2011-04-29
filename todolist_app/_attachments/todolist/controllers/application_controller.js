@@ -32,16 +32,12 @@ $.Controller.extend('Todolist.Controllers.Application',
     
     new Todolist.Controllers.List($("#todolist"));
     
-    // check loginstatus
-    var userCtx = Todolist.Models.User.session(function(session) {
-      if(session.userCtx.name) {
-        self.switchLoginState(session.userCtx.name);
-      }
-    });
+    // logout bei start der Applikation, da wir das klartext Passwort benötigen
+    Todolist.Models.User.logout();
   },
   
   initializeNewTodoDialog: function() {
-    this.Class.new_todo_dialog = $("#new_todo_dialog"); 
+    this.Class.new_todo_dialog = $("#new_todo_dialog");
     this.newDialog(this.Class.new_todo_dialog, null, "Neuen Task anlegen", function(ev) {
       ev.preventDefault();
 
@@ -72,11 +68,12 @@ $.Controller.extend('Todolist.Controllers.Application',
     this.newDialog(this.Class.sign_in_dialog, $("#login_button"), "SignIn", function(ev) {
       ev.preventDefault();
 
-      var sign_in_form = $(ev.currentTarget).closest("form");
-      new Todolist.Models.User(sign_in_form.formParams()).login(function(response) {
+      var sign_in_form_params = $(ev.currentTarget).closest("form").formParams();
+      new Todolist.Models.User(sign_in_form_params).login(function(response) {
         if(response === 401) {
           alert("Login fehlgeschlagen!");
         } else {
+          self.Class.SESSION_PW = sign_in_form_params.password;
           self.switchLoginState(response.name);
           self.Class.sign_in_dialog.dialog("close");
         }

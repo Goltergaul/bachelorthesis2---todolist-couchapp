@@ -29,8 +29,7 @@ $.Model.extend('Todolist.Models.List',
     jQuery.extend(attrs, this.hidden_attributes);
     
     delete attrs.todos // die gehören nicht in dieses DB Dolument
-    
-    return attrs;
+    return this.encrypt(attrs);
   },
   
   wrapMany : function(rows) {
@@ -46,13 +45,29 @@ $.Model.extend('Todolist.Models.List',
   transform : function(row) {
     if(!row.doc.todos)
       row.doc.todos = [];
-    return this.wrap({
+    var wrapped = this.wrap({
         id: row.id,
         _rev: row.doc._rev,
         title: row.doc.title,
         owners: row.doc.owners,
         todos: row.doc.todos
       });
+      
+    return this.decrypt(wrapped);
+  },
+  
+  encrypt : function(row) {
+    row.title = sjcl.encrypt(Todolist.Controllers.Application.SESSION_PW.toString(), row.title);
+    return row;
+  },
+  
+  decrypt : function(row) {
+    try {
+      row.title = sjcl.decrypt(Todolist.Controllers.Application.SESSION_PW.toString(), row.title);
+    } catch(e) {
+      row.title = "Nicht entschlüsselbar";
+    }
+    return row;
   },
 
 	/**

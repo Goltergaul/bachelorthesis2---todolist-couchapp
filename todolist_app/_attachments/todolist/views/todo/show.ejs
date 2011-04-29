@@ -1,0 +1,5 @@
+<div <%=todo%>>
+  <% var check = (todo.status === true) ? "checked='checked'" : "";%>
+  <input type="checkbox" name="done" class="checkbox_done" <%=check%>/>
+  <%= todo.descr %> <img src="../images/icon_delete.gif" class="destroy" />
+</div>

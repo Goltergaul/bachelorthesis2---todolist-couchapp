@@ -54,7 +54,7 @@ $.Controller.extend('Todolist.Controllers.List',
         new Todolist.Models.List($(this).closest("form").formParams()).save();
       });
       
-      this.Class.new_list_dialog.find("input[name=owners]").tokenInput("/_users/_design/_auth/_list/users/users", {
+      this.Class.new_list_dialog.find("input[name=owners]").tokenInput("/couch/_users/_design/_auth/_list/users/users", {
         hintText: "Gebe Benutzer an, die diese Liste auch bearbeiten können sollen",
         noResultsText: "Kein Benutzer mit diesem Namen vorhanden",
         searchingText: "Suche...",
@@ -74,7 +74,7 @@ $.Controller.extend('Todolist.Controllers.List',
     
     /**
      *	 Handle's clicking on a list's destroy link.
-     */
+     */ 
     '.DATA-delete-list-button click': function( el ){
       if(confirm("Are you sure you want to destroy?")){
         var list_model = el.closest('.list').model()

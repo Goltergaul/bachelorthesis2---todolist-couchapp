@@ -14,7 +14,9 @@ steal.plugins(
 
 	.resources('couch', 'sha1', 'jquery.tokeninput').then(function() {
 	  
+	  $.couch.urlPrefix = '/couch';
 	  window.db = $.couch.db("todolist(public)");
+	  window.db_write = $.couch.db("todolist(master)");
 	  
 	})					// 3rd party script's (like jQueryUI), in resources folder
 

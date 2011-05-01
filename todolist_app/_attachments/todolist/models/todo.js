@@ -87,7 +87,7 @@ $.Model.extend('Todolist.Models.Todo',
      */
 	update: function( id, doc, success, error ){
 	  var self = this;
-		db.saveDoc(this.getDocument({
+		db_write.saveDoc(this.getDocument({
 		  _id: doc.id,
 		  _rev: doc._rev,
 		  descr: doc.descr,
@@ -108,7 +108,7 @@ $.Model.extend('Todolist.Models.Todo',
  	 * @param {Function} error a callback that should be called with an object of errors.
 	 */
 	destroy: function( id, rev , success, error ){
-		db.removeDoc({ _id: id, _rev: rev }, {
+		db_write.removeDoc({ _id: id, _rev: rev }, {
       success: success
     });
 	},
@@ -126,7 +126,7 @@ $.Model.extend('Todolist.Models.Todo',
 	  attrs.date = this.getDate();
 	  attrs.status = false;
 	  
-		db.saveDoc(this.getDocument(attrs), {
+		db_write.saveDoc(this.getDocument(attrs), {
       success: function(response, new_doc) {
         jQuery.extend(attrs, response);
         success(self.transform(new_doc));

@@ -61,7 +61,16 @@ $.Controller.extend('Todolist.Controllers.Application',
       ev.preventDefault();
 
       var sign_up_form = $(ev.currentTarget).closest("form");
-      new Todolist.Models.User(sign_up_form.formParams()).save();
+      $.ajax({
+        url: "/signup.php",
+        data: sign_up_form.formParams(),
+        dataType: "json",
+        type: "POST",
+        success: function() {
+          alert("Erfolgreich Angemeldet! Du kannst dich nun einloggen!");
+          self.Class.sign_up_dialog.dialog("close");
+        }
+      });
     });
   },
   
@@ -111,6 +120,7 @@ $.Controller.extend('Todolist.Controllers.Application',
       
       // Listen entfernen
       $("#todolist").children().remove();
+      window.db = $.couch.db("todolist(public)"); // auf public db zurück-wechseln
     } else {
       // Status für eingeloggte User
       $("#logout_button").button("enable");
@@ -119,6 +129,7 @@ $.Controller.extend('Todolist.Controllers.Application',
       this.LOGIN_STATE = Todolist.Controllers.Application.LOGIN;
       this.Class.SESSION = username;
       
+      window.db = $.couch.db(this.Class.SESSION+"(private)");
       // Todolisten Controller initialisieren --> läd die Listen
       $("#todolist").controller().load();
     }

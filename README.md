@@ -59,7 +59,7 @@ You'll ned an Apache2 server with mod_rewrite. Create a VirtualHost like this on
 
     </VirtualHost>
 
-To visit the app, navigate to hhttp://todolist.localhost.de/todolist(public)/_design/todolist/static/todolist/todolist.html
+To visit the app, navigate to http://todolist.localhost.de/todolist(public)/_design/todolist/static/todolist/todolist.html
 
 ### Encryption
 No additional software needed.

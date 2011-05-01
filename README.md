@@ -11,7 +11,7 @@ Define an admin for CouchDB so that it's not running an Admin Party.
 
 Change into the app directory in your terminal, and push it to your CouchDB with the CouchApp command line tool, like this:
 
-  couchapp push
+    couchapp push
 
 Do this with both apps. You'll need to configure your admin credentials in the .couchapprc files first. 
 
@@ -23,24 +23,24 @@ If you deploy the code of any of the three branches, there are some extra setup 
 ### Per-User-Database
 You'll need an Apache2 server with mod_rewirte, mod_proxy enabled and PHP. Create a VirtualHost like this one:
 
-  <VirtualHost *:80>
-	  DocumentRoot /home/gaul/AptanaWorkspace/todolist/www
-	  ServerName todolist.localhost.de
+    <VirtualHost *:80>
+	    DocumentRoot /home/gaul/AptanaWorkspace/todolist/www
+	    ServerName todolist.localhost.de
 
-	  RewriteEngine on
+	    RewriteEngine on
 
-	  RewriteCond %{REQUEST_URI} ^/couch/_replicate.*$
-	  RewriteRule ^/(.*)$ proxy:http://todolist.localhost.de/404.html
+	    RewriteCond %{REQUEST_URI} ^/couch/_replicate.*$
+	    RewriteRule ^/(.*)$ proxy:http://todolist.localhost.de/404.html
 
-	  ProxyPass /couch http://localhost:5984
+	    ProxyPass /couch http://localhost:5984
 
-	  <Location /couch/todolist(master)>
-		  <LimitExcept POST PUT>
-			  order deny,allow
-			  deny from all
-		  </LimitExcept> 
-	  </Location>
-  </VirtualHost>
+	    <Location /couch/todolist(master)>
+		    <LimitExcept POST PUT>
+			    order deny,allow
+			    deny from all
+		    </LimitExcept> 
+	    </Location>
+    </VirtualHost>
 
 Now create an additional CouchDB Database named "todolist(master)" and replicate once from "todolist(public)" in "todolist(master)"
 
@@ -49,15 +49,15 @@ To visit the app, navigate to http://todolist.localhost.de/couch/todolist(public
 ### Proxy-Lists
 You'll ned an Apache2 server with mod_rewrite. Create a VirtualHost like this one:
 
-  <VirtualHost *:80>
-	  ServerName todolist.localhost.de
+    <VirtualHost *:80>
+	    ServerName todolist.localhost.de
 
-	  RewriteEngine on
+	    RewriteEngine on
 
-	  RewriteCond %{THE_REQUEST} ^DELETE|POST|PUT\ /.*$|^GET\ /todolist\(public\)/_design/todolist/(static|_list).*$|^GET\ /(_session|_users)
-	  RewriteRule ^/(.*)$ proxy:http://localhost:5984/$1
+	    RewriteCond %{THE_REQUEST} ^DELETE|POST|PUT\ /.*$|^GET\ /todolist\(public\)/_design/todolist/(static|_list).*$|^GET\ /(_session|_users)
+	    RewriteRule ^/(.*)$ proxy:http://localhost:5984/$1
 
-  </VirtualHost>
+    </VirtualHost>
 
 To visit the app, navigate to hhttp://todolist.localhost.de/todolist(public)/_design/todolist/static/todolist/todolist.html
 
